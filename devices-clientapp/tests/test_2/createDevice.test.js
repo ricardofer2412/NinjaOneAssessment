@@ -94,7 +94,7 @@ test("Test missing System Capacity Input", async (t) => {
   await t.expect(devices.exists).notOk();
 });
 
-test("Check if capacity input is a string.", async (t) => {
+test("Check if capacity input is a number", async (t) => {
   const addButton = Selector(".submitButton");
   const systemName = Selector("#system_name");
   const systemType = Selector("#type");
