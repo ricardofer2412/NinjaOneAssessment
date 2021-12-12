@@ -69,7 +69,7 @@ test("Test missing System Name Input", async (t) => {
   await t.expect(devices.exists).notOk();
 });
 
-test("Test missing System Name Input", async (t) => {
+test("Test missing System Capacity Input", async (t) => {
   const addButton = Selector(".submitButton");
   const systemName = Selector("#system_name");
   const systemCap = Selector("#hdd_capacity");

@@ -93,3 +93,29 @@ test("Test missing System Capacity Input", async (t) => {
 
   await t.expect(devices.exists).notOk();
 });
+
+test("Check if capacity input is a string.", async (t) => {
+  const addButton = Selector(".submitButton");
+  const systemName = Selector("#system_name");
+  const systemType = Selector("#type");
+  const systemCap = Selector("#hdd_capacity");
+  const systemTypeOptions = systemType.find("option");
+  const name = "test-" + Date.now();
+  const type = "MAC";
+  const cap = "Hello I am a string";
+
+  await t.click(addButton);
+  await t.typeText(systemName, name, { paste: true });
+  await t
+    .click(systemType)
+    .click(systemTypeOptions.withText(type))
+    .expect(systemType.value)
+    .eql("MAC");
+  await t.typeText(systemCap, cap, { paste: true });
+
+  await t.click(".submitButton");
+
+  const devices = Selector(".device-main-box");
+
+  await t.expect(devices.exists).notOk();
+});
