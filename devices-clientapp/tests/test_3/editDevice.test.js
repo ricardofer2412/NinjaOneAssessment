@@ -44,3 +44,50 @@ test("Edit first device", async (t) => {
   }
   await t.expect(1).eql(totalMatch);
 });
+
+test("Test missing System Name Input", async (t) => {
+  const addButton = Selector(".submitButton");
+  const systemName = Selector("#system_name");
+  const systemCap = Selector("#hdd_capacity");
+  const systemType = Selector("#type");
+  const systemTypeOptions = systemType.find("option");
+  const cap = "1000";
+  const type = "MAC";
+
+  await t.click(addButton);
+  await t.click(systemName).pressKey("ctrl+a delete");
+  await t
+    .click(systemType)
+    .click(systemTypeOptions.withText(type))
+    .expect(systemType.value)
+    .eql("MAC");
+  await t.typeText(systemCap, cap, { paste: true });
+  await t.click(".submitButton");
+
+  const devices = Selector(".device-main-box");
+
+  await t.expect(devices.exists).notOk();
+});
+
+test("Test missing System Name Input", async (t) => {
+  const addButton = Selector(".submitButton");
+  const systemName = Selector("#system_name");
+  const systemCap = Selector("#hdd_capacity");
+  const systemType = Selector("#type");
+  const systemTypeOptions = systemType.find("option");
+  const name = "test-" + Date.now();
+  const type = "MAC";
+
+  await t.click(addButton);
+  await t.typeText(systemName, name, { replace: true });
+  await t
+    .click(systemType)
+    .click(systemTypeOptions.withText(type))
+    .expect(systemType.value)
+    .eql("MAC");
+  await t.click(systemCap).pressKey("ctrl+a delete");
+  await t.click(".submitButton");
+
+  const devices = Selector(".device-main-box");
+  await t.expect(devices.exists).notOk();
+});
