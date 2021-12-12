@@ -65,10 +65,8 @@ test("Test missing System Name Input", async (t) => {
     .eql("MAC");
   await t.typeText(systemCap, cap, { paste: true });
   await t.click(".submitButton");
-
-  const devices = Selector(".device-main-box");
-
-  await t.expect(devices.exists).notOk();
+  const errorMessage = Selector("span").withText("NO EMPTY FIELDS ALLOWED!");
+  await t.expect(errorMessage.exists).ok();
 });
 
 test("Test missing System Capacity Input", async (t) => {
@@ -89,9 +87,8 @@ test("Test missing System Capacity Input", async (t) => {
 
   await t.click(".submitButton");
 
-  const devices = Selector(".device-main-box");
-
-  await t.expect(devices.exists).notOk();
+  const errorMessage = Selector("span").withText("NO EMPTY FIELDS ALLOWED!");
+  await t.expect(errorMessage.exists).ok();
 });
 
 test("Check if capacity input is a number", async (t) => {
@@ -115,7 +112,6 @@ test("Check if capacity input is a number", async (t) => {
 
   await t.click(".submitButton");
 
-  const devices = Selector(".device-main-box");
-
-  await t.expect(devices.exists).notOk();
+  const errorMessage = Selector("span").withText("NO EMPTY FIELDS ALLOWED!");
+  await t.expect(errorMessage.exists).ok();
 });
