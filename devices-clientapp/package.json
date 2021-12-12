@@ -32,6 +32,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "testcafe": "^1.17.1"
+    "testcafe": "^1.17.1",
+    "xpath-to-css": "^1.0.5"
   }
 }
