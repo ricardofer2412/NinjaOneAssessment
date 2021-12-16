@@ -11,43 +11,26 @@ fixture`Check for elements in DOM are visible`
        devicesList = res.data
     });
 test("Check that device is rendered properly", async (t) => {
-  //  const devices = Selector(".device-main-box");
-  //  const numberOfDevices = await devices.count;
-
-  //  let totalMatch = 0;
-
-  //  for (let i = 0; i < numberOfDevices; i++) {
-  //    const device = devices.nth(i);
-
-  //    const deviceName = await device.find(".device-name").innerText;
-  //    const deviceType = await device.find(".device-type").innerText;
-  //    const deviceCap = await device.find(".device-capacity").innerText;
-
-  //    const deviceRenderedCorrectly = devicesList.find((item) => {
-  //      return (
-  //        item.system_name === deviceName &&
-  //        item.type === deviceType &&
-  //        item.hdd_capacity + " GB" === deviceCap
-  //      );
-  //    });
-
-  //    if (deviceRenderedCorrectly) {
-  //      totalMatch += 1;
-  //    }
-  //  }
-  //  await t.expect(totalMatch).eql(numberOfDevices);
-  const count = await DeviceListComponent.devicesBox.count;
-  console.log("Number", count);
-  for (let i = 0; i < count; i++) {
-    const device = DeviceListComponent.devicesBox.nth(i);
-    const deviceName = await device.find(DeviceListComponent.deviceName)
-      .innerText;
-    console.log(deviceName);
-    // const deviceName = await device.find(DeviceListComponent.deviceName)
-    //   .innerText;
+  const devices = Selector(".device-main-box");
+  const numberOfDevices = await devices.count;
+  let totalMatch = 0;
+  for (let i = 0; i < numberOfDevices; i++) {
+    const device = devices.nth(i);
+    const deviceName = await device.find(".device-name").innerText;
+    const deviceType = await device.find(".device-type").innerText;
+    const deviceCap = await device.find(".device-capacity").innerText;
+    const deviceRenderedCorrectly = devicesList.find((item) => {
+      return (
+        item.system_name === deviceName &&
+        item.type === deviceType &&
+        item.hdd_capacity + " GB" === deviceCap
+      );
+    });
+    if (deviceRenderedCorrectly) {
+      totalMatch += 1;
+    }
   }
-
-  // await DeviceListComponent.findMatches();
+  await t.expect(totalMatch).eql(numberOfDevices);
 });
 
 test("Check that each device has a edit and delete button", async (t) => {

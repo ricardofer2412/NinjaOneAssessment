@@ -1,16 +1,15 @@
 import { Selector, t } from "testcafe";
 
-class DeviceForm {
+class Form {
   constructor() {
     this.systemName = Selector("#system_name");
     this.systemCap = Selector("#hdd_capacity");
     this.systemType = Selector("#type");
     this.systemTypeOptions = this.systemType.find("option");
-    this.submitButton = Selector(".submitButton");
+    this.addDeviceButton = Selector("button").withText("SAVE");
   }
 
   async fillingForm(name, type, cap) {
-    console.log(name, type, cap);
     await t.typeText(this.systemName, name, { paste: true });
 
     await t
@@ -18,11 +17,8 @@ class DeviceForm {
       .click(this.systemTypeOptions.withText(type))
       .expect(this.systemType.value)
       .eql(type);
-    await t.wait(1000);
     await t.typeText(this.systemCap, cap, { paste: true });
-    await t.wait(1000);
-    await t.click(this.submitButton);
   }
 }
 
-export default DeviceForm;
+export default new Form();
