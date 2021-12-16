@@ -11,14 +11,7 @@ test("Create a new device", async (t) => {
   const type = "MAC";
 
   await t.click(List.addDeviceButton);
-  await t.typeText(Form.systemName, name, { paste: true });
-  await t
-    .click(Form.systemType)
-    .click(Form.systemTypeOptions.withText(type))
-    .expect(Form.systemType.value)
-    .eql("MAC");
-  await t.typeText(Form.capsystemCap, cap, { paste: true });
-  await t.click(".submitButton");
+  await Form.fillingForm(name, type, cap);
 
   const devices = Selector(".device-main-box");
   const numberOfDevices = await devices.count;
@@ -44,68 +37,35 @@ test("Create a new device", async (t) => {
 });
 
 test("Test missing System Name Input", async (t) => {
-  const addButton = Selector(".submitButton");
-  const systemCap = Selector("#hdd_capacity");
-  const systemType = Selector("#type");
-  const systemTypeOptions = systemType.find("option");
+  const name = null;
   const cap = "1000";
   const type = "MAC";
 
-  await t.click(addButton);
-  await t
-    .click(systemType)
-    .click(systemTypeOptions.withText(type))
-    .expect(systemType.value)
-    .eql("MAC");
-  await t.typeText(systemCap, cap, { paste: true });
-  await t.click(".submitButton");
+  await t.click(List.addDeviceButton);
+  await Form.fillingForm(name, type, cap);
+
   const errorMessage = Selector("span").withText("NO EMPTY FIELDS ALLOWED!");
   await t.expect(errorMessage.exists).ok();
 });
 
 test("Test missing System Capacity Input", async (t) => {
-  const addButton = Selector(".submitButton");
-  const systemName = Selector("#system_name");
-  const systemType = Selector("#type");
-  const systemTypeOptions = systemType.find("option");
   const name = "test-" + Date.now();
   const type = "MAC";
+  const cap = null;
 
-  await t.click(addButton);
-  await t.typeText(systemName, name, { paste: true });
-  await t
-    .click(systemType)
-    .click(systemTypeOptions.withText(type))
-    .expect(systemType.value)
-    .eql("MAC");
+  await t.click(List.addDeviceButton);
+  await Form.fillingForm(name, type, cap);
 
-  await t.click(".submitButton");
-
-  const errorMessage = Selector("span").withText("NO EMPTY FIELDS ALLOWED!");
-  await t.expect(errorMessage.exists).ok();
+  await t.expect(Form.errorMessage.visible).ok();
 });
 
 test("Check if capacity input is a number", async (t) => {
-  const addButton = Selector(".submitButton");
-  const systemName = Selector("#system_name");
-  const systemType = Selector("#type");
-  const systemCap = Selector("#hdd_capacity");
-  const systemTypeOptions = systemType.find("option");
   const name = "test-" + Date.now();
   const type = "MAC";
   const cap = "Hello I am a string";
 
-  await t.click(addButton);
-  // await t.typeText(systemName, name, { paste: true });
-  // await t
-  //   .click(systemType)
-  //   .click(systemTypeOptions.withText(type))
-  //   .expect(systemType.value)
-  //   .eql("MAC");
-  // await t.typeText(systemCap, cap, { paste: true });
-  Form.fillingForm(name, type, cap);
-  await t.click(".submitButton");
+  await t.click(List.addDeviceButton);
+  await Form.fillingForm(name, type, cap);
 
-  const errorMessage = Selector("span").withText("NO EMPTY FIELDS ALLOWED!");
-  await t.expect(errorMessage.exists).ok();
+  await t.expect(Form.errorMessage.visible).ok();
 });
