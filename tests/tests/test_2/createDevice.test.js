@@ -1,9 +1,12 @@
 import { Selector, fixture } from "testcafe";
+import { deleteDevice, getAllDevices } from "../../api";
+import { DEV_CLIENT_URL } from "../../constants";
 import Form from "../../page-objects/components/DeviceForm";
 import List from "../../page-objects/components/DevicesList";
+
 //prettier-ignore
 fixture`Check for elements in DOM are visible`
- .page`http://localhost:3001/`
+ .page`${DEV_CLIENT_URL}`
 
 test("Create a new device", async (t) => {
   const name = "test-" + Date.now();
@@ -34,6 +37,23 @@ test("Create a new device", async (t) => {
     }
   }
   await t.expect(1).eql(totalMatch);
+
+  // CLEAN UP
+  const deviceToDelete = { name, cap, type };
+  try {
+    const devices = await getAllDevices();
+    const deviceFound = devices.find(
+      (device) => device.system_name === deviceToDelete.name
+    );
+    if (!deviceFound) {
+      throw new Error("Created device was not found. unable to delete");
+    }
+    await deleteDevice(deviceFound.id);
+  } catch (e) {
+    throw new Error(
+      "Cannot perform clean up for creating device: " + e.message
+    );
+  }
 });
 
 test("Test missing System Name Input", async (t) => {
